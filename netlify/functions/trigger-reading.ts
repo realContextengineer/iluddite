@@ -80,19 +80,29 @@ ${TONE_GUIDE}`,
     const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
     const reading = JSON.parse(responseText);
 
-    // Store in Netlify Blobs
-    const store = getStore('readings');
-    const dateKey = getDateString();
+    // Try to store in Netlify Blobs
+    let stored = false;
+    try {
+      const store = getStore({
+        name: 'readings',
+        siteID: process.env.SITE_ID || '',
+        token: process.env.NETLIFY_API_TOKEN || '',
+      });
+      const dateKey = getDateString();
 
-    await store.set(dateKey, JSON.stringify(reading));
-    await store.set('today', JSON.stringify({
-      date: dateKey,
-      reading: reading,
-    }));
+      await store.set(dateKey, JSON.stringify(reading));
+      await store.set('today', JSON.stringify({
+        date: dateKey,
+        reading: reading,
+      }));
+      stored = true;
+    } catch (blobError) {
+      console.warn('Could not store in Blobs (will still return reading):', blobError);
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, day: dayOfYear, date: prompt.date, reading }),
+      body: JSON.stringify({ success: true, stored, day: dayOfYear, date: prompt.date, reading }),
     };
   } catch (error) {
     console.error('Error generating reading:', error);
