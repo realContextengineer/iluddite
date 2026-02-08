@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 function getDateString(): string {
   const now = new Date();
-  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
   return ukTime.toISOString().split('T')[0];
 }
 

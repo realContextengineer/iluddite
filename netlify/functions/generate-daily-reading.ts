@@ -34,7 +34,7 @@ IMPORTANT: Return ONLY the JSON object, no markdown, no code fences, no extra te
 
 function getDayOfYear(): number {
   const now = new Date();
-  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
   const start = new Date(ukTime.getFullYear(), 0, 0);
   const diff = ukTime.getTime() - start.getTime();
   const oneDay = 1000 * 60 * 60 * 24;
@@ -43,7 +43,7 @@ function getDayOfYear(): number {
 
 function getDateString(): string {
   const now = new Date();
-  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
+  const ukTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
   return ukTime.toISOString().split('T')[0];
 }
 
