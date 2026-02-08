@@ -1,5 +1,5 @@
 import { Handler } from '@netlify/functions';
-import { getStore } from '@netlify/blobs';
+import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
 import prompts from '../../src/data/prompts.json';
 
@@ -80,19 +80,28 @@ ${TONE_GUIDE}`,
     const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
     const reading = JSON.parse(responseText);
 
-    // Store in Netlify Blobs
-    const store = getStore('readings');
-    const dateKey = getDateString();
+    // Store in Supabase
+    const supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
-    await store.set(dateKey, JSON.stringify(reading));
-    await store.set('today', JSON.stringify({
-      date: dateKey,
-      reading: reading,
-    }));
+    const { error: dbError } = await supabase
+      .from('readings')
+      .upsert({
+        date: getDateString(),
+        day: dayOfYear,
+        content: reading,
+      });
+
+    if (dbError) {
+      console.error('Supabase error:', dbError);
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, day: dayOfYear, date: prompt.date, reading }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ success: true, stored: !dbError, day: dayOfYear, date: prompt.date, reading }),
     };
   } catch (error) {
     console.error('Error generating reading:', error);

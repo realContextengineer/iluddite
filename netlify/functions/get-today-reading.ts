@@ -1,12 +1,18 @@
 import { Handler } from '@netlify/functions';
-import { getStore } from '@netlify/blobs';
+import { createClient } from '@supabase/supabase-js';
+
+function getDateString(): string {
+  const now = new Date();
+  const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
+  return ukTime.toISOString().split('T')[0];
+}
 
 const handler: Handler = async (event) => {
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
+    'Cache-Control': 'public, max-age=300',
   };
 
   if (event.httpMethod === 'OPTIONS') {
@@ -14,10 +20,20 @@ const handler: Handler = async (event) => {
   }
 
   try {
-    const store = getStore('readings');
-    const todayData = await store.get('today');
+    const supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
-    if (!todayData) {
+    const todayDate = getDateString();
+
+    const { data, error } = await supabase
+      .from('readings')
+      .select('content')
+      .eq('date', todayDate)
+      .single();
+
+    if (error || !data) {
       return {
         statusCode: 404,
         headers,
@@ -25,12 +41,10 @@ const handler: Handler = async (event) => {
       };
     }
 
-    const parsed = JSON.parse(todayData);
-
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(parsed.reading),
+      body: JSON.stringify(data.content),
     };
   } catch (error) {
     console.error('Error fetching reading:', error);
