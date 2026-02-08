@@ -48,7 +48,7 @@ function getDateString(): string {
   return ukTime.toISOString().split('T')[0];
 }
 
-const handler = async () => {
+const innerHandler = async () => {
   try {
     const dayOfYear = getDayOfYear();
     const prompt = prompts.find(p => p.day === dayOfYear);
@@ -111,4 +111,4 @@ ${TONE_GUIDE}`,
 
 // Run at midnight UK time (GMT = 00:00, BST = 23:00 UTC previous day)
 // We'll use 00:05 UTC to be safe — during BST this is 01:05 UK time
-export const main = schedule('5 0 * * *', handler);
+export const handler = schedule('5 0 * * *', innerHandler);
