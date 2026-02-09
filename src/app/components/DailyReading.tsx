@@ -1,6 +1,7 @@
 import React from 'react';
-import { BookOpen, Compass, Quote, Shield } from 'lucide-react';
+import { BookOpen, Compass, Quote, Shield, Check } from 'lucide-react';
 import { AnimateIn } from './AnimateIn';
+import { useCompletions, SectionKey } from '../hooks/useCompletions';
 
 interface Reading {
   day: number;
@@ -21,7 +22,50 @@ interface DailyReadingProps {
   reading: Reading;
 }
 
+function TappableCard({
+  sectionKey,
+  isComplete,
+  onToggle,
+  children,
+}: {
+  sectionKey: SectionKey;
+  isComplete: boolean;
+  onToggle: (key: SectionKey) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onToggle(sectionKey)}
+      className="w-full text-left relative group"
+      aria-pressed={isComplete}
+      aria-label={isComplete ? 'Marked as done. Tap to undo.' : 'Tap to mark as done.'}
+    >
+      {children}
+      {/* Tick indicator */}
+      <div
+        className={`
+          absolute top-4 right-4
+          w-6 h-6 rounded-full flex items-center justify-center
+          transition-all duration-300
+          ${isComplete
+            ? 'bg-[#D4793A]/15 dark:bg-[#E07A3A]/15 scale-100 opacity-100'
+            : 'scale-75 opacity-0 pointer-events-none'
+          }
+        `}
+      >
+        <Check
+          className="w-3.5 h-3.5 text-[#D4793A] dark:text-[#E07A3A]"
+          strokeWidth={3}
+        />
+      </div>
+    </button>
+  );
+}
+
 export function DailyReading({ reading }: DailyReadingProps) {
+  const { completions, toggle } = useCompletions(reading.date);
+
   return (
     <div className="max-w-xl mx-auto space-y-4">
       {/* Hero Card — Title */}
@@ -43,7 +87,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
         </div>
       </AnimateIn>
 
-      {/* Main Reading Card */}
+      {/* Main Reading Card — NOT tappable */}
       <AnimateIn delay={100}>
         <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl p-8 shadow-sm border border-[#E8E4DD]/60 dark:border-[#2A2A2A] transition-colors duration-500">
           <div className="flex items-center gap-2.5 mb-5">
@@ -64,24 +108,26 @@ export function DailyReading({ reading }: DailyReadingProps) {
         </div>
       </AnimateIn>
 
-      {/* Practice Card — stands out */}
+      {/* Practice Card — TAPPABLE */}
       <AnimateIn delay={0}>
-        <div className="bg-[#D4793A]/[0.06] dark:bg-[#E07A3A]/[0.06] rounded-2xl p-7 border border-[#D4793A]/15 dark:border-[#E07A3A]/15 transition-colors duration-500">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-7 h-7 rounded-full bg-[#D4793A]/15 dark:bg-[#E07A3A]/15 flex items-center justify-center">
-              <Compass className="w-3.5 h-3.5 text-[#D4793A] dark:text-[#E07A3A]" />
+        <TappableCard sectionKey="practice" isComplete={completions.practice} onToggle={toggle}>
+          <div className={`bg-[#D4793A]/[0.06] dark:bg-[#E07A3A]/[0.06] rounded-2xl p-7 border transition-colors duration-500 ${completions.practice ? 'border-[#D4793A]/40 dark:border-[#E07A3A]/40' : 'border-[#D4793A]/15 dark:border-[#E07A3A]/15'}`}>
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-7 h-7 rounded-full bg-[#D4793A]/15 dark:bg-[#E07A3A]/15 flex items-center justify-center">
+                <Compass className="w-3.5 h-3.5 text-[#D4793A] dark:text-[#E07A3A]" />
+              </div>
+              <h2 className="text-[10px] text-[#D4793A] dark:text-[#E07A3A] uppercase tracking-[0.15em] font-semibold font-mono">
+                Today's Practice
+              </h2>
             </div>
-            <h2 className="text-[10px] text-[#D4793A] dark:text-[#E07A3A] uppercase tracking-[0.15em] font-semibold font-mono">
-              Today's Practice
-            </h2>
+            <p className="text-[15px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.8]">
+              {reading.practice}
+            </p>
           </div>
-          <p className="text-[15px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.8]">
-            {reading.practice}
-          </p>
-        </div>
+        </TappableCard>
       </AnimateIn>
 
-      {/* Random Quote Card */}
+      {/* Random Quote Card — NOT tappable */}
       <AnimateIn delay={0}>
         <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl p-7 shadow-sm border border-[#E8E4DD]/60 dark:border-[#2A2A2A] transition-colors duration-500">
           <div className="flex items-center gap-2.5 mb-4">
@@ -103,44 +149,50 @@ export function DailyReading({ reading }: DailyReadingProps) {
         </div>
       </AnimateIn>
 
-      {/* Tech Boundary Card */}
+      {/* Tech Boundary Card — TAPPABLE */}
       <AnimateIn delay={0}>
-        <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl p-7 shadow-sm border border-[#E8E4DD]/60 dark:border-[#2A2A2A] transition-colors duration-500">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-7 h-7 rounded-full bg-[#D4793A]/10 dark:bg-[#E07A3A]/10 flex items-center justify-center">
-              <Shield className="w-3.5 h-3.5 text-[#D4793A] dark:text-[#E07A3A]" />
+        <TappableCard sectionKey="techBoundary" isComplete={completions.techBoundary} onToggle={toggle}>
+          <div className={`bg-white dark:bg-[#1A1A1A] rounded-2xl p-7 shadow-sm border transition-colors duration-500 ${completions.techBoundary ? 'border-[#D4793A]/40 dark:border-[#E07A3A]/40' : 'border-[#E8E4DD]/60 dark:border-[#2A2A2A]'}`}>
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-7 h-7 rounded-full bg-[#D4793A]/10 dark:bg-[#E07A3A]/10 flex items-center justify-center">
+                <Shield className="w-3.5 h-3.5 text-[#D4793A] dark:text-[#E07A3A]" />
+              </div>
+              <h2 className="text-[10px] text-[#999] dark:text-[#555] uppercase tracking-[0.15em] font-semibold font-mono">
+                Today's Boundary
+              </h2>
             </div>
-            <h2 className="text-[10px] text-[#999] dark:text-[#555] uppercase tracking-[0.15em] font-semibold font-mono">
-              Today's Boundary
-            </h2>
+            <p className="text-[15px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.8]">
+              {reading.techBoundary}
+            </p>
           </div>
-          <p className="text-[15px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.8]">
-            {reading.techBoundary}
-          </p>
-        </div>
+        </TappableCard>
       </AnimateIn>
 
-      {/* Small Actions Row */}
+      {/* Small Actions Row — BOTH TAPPABLE */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <AnimateIn delay={0}>
-          <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl p-5 shadow-sm border border-[#E8E4DD]/60 dark:border-[#2A2A2A] h-full transition-colors duration-500">
-            <p className="text-[10px] text-[#D4793A] dark:text-[#E07A3A] uppercase tracking-[0.15em] font-semibold font-mono mb-2.5">
-              For You
-            </p>
-            <p className="text-[14px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.7]">
-              {reading.niceSelf}
-            </p>
-          </div>
+          <TappableCard sectionKey="niceSelf" isComplete={completions.niceSelf} onToggle={toggle}>
+            <div className={`bg-white dark:bg-[#1A1A1A] rounded-2xl p-5 shadow-sm border h-full transition-colors duration-500 ${completions.niceSelf ? 'border-[#D4793A]/40 dark:border-[#E07A3A]/40' : 'border-[#E8E4DD]/60 dark:border-[#2A2A2A]'}`}>
+              <p className="text-[10px] text-[#D4793A] dark:text-[#E07A3A] uppercase tracking-[0.15em] font-semibold font-mono mb-2.5">
+                For You
+              </p>
+              <p className="text-[14px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.7]">
+                {reading.niceSelf}
+              </p>
+            </div>
+          </TappableCard>
         </AnimateIn>
         <AnimateIn delay={120}>
-          <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl p-5 shadow-sm border border-[#E8E4DD]/60 dark:border-[#2A2A2A] h-full transition-colors duration-500">
-            <p className="text-[10px] text-[#D4793A] dark:text-[#E07A3A] uppercase tracking-[0.15em] font-semibold font-mono mb-2.5">
-              For Someone Else
-            </p>
-            <p className="text-[14px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.7]">
-              {reading.niceOther}
-            </p>
-          </div>
+          <TappableCard sectionKey="niceOther" isComplete={completions.niceOther} onToggle={toggle}>
+            <div className={`bg-white dark:bg-[#1A1A1A] rounded-2xl p-5 shadow-sm border h-full transition-colors duration-500 ${completions.niceOther ? 'border-[#D4793A]/40 dark:border-[#E07A3A]/40' : 'border-[#E8E4DD]/60 dark:border-[#2A2A2A]'}`}>
+              <p className="text-[10px] text-[#D4793A] dark:text-[#E07A3A] uppercase tracking-[0.15em] font-semibold font-mono mb-2.5">
+                For Someone Else
+              </p>
+              <p className="text-[14px] text-[#3D3D3D] dark:text-[#B0ACA5] leading-[1.7]">
+                {reading.niceOther}
+              </p>
+            </div>
+          </TappableCard>
         </AnimateIn>
       </div>
 
