@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DailyReading } from './components/DailyReading';
 import { ThemeToggle } from './components/ThemeToggle';
+import { PricingModal } from './components/PricingModal';
 import readingsData from '../data/readings.json';
 import promptsData from '../data/prompts.json';
 import hammerLogo from '../assets/hammer.jpg';
 import iludditeLogo from '../assets/iluddite-logo.png';
+import bitlessLogo from '../assets/bitless-logo.png';
+import bitlessChess from '../assets/bitless-chess.png';
 
 interface Reading {
   day: number;
@@ -25,6 +28,7 @@ function App() {
   const [reading, setReading] = useState<Reading | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true); // Dark by default
+  const [showPricing, setShowPricing] = useState(false);
 
   // Initialize dark mode — default to dark
   useEffect(() => {
@@ -103,17 +107,22 @@ function App() {
     <div className="min-h-screen bg-[#F5F2ED] dark:bg-[#111111] transition-colors duration-500">
       {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#F5F2ED]/80 dark:bg-[#111111]/80 border-b border-[#E0DCD5]/50 dark:border-[#222222]/80">
-        <div className="max-w-xl mx-auto px-5">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
+        <div className="max-w-xl mx-auto px-5 relative">
+          <div className="flex items-center justify-between h-24">
+            {/* Left side */}
             <div className="flex items-center">
-              <span className="text-[22px] font-semibold text-[#1A1A1A] dark:text-[#E8E4DD] tracking-tight">Bitless</span>
+              <ThemeToggle isDark={isDarkMode} onToggle={toggleDarkMode} />
+            </div>
+
+            {/* Centre logo */}
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <img src={bitlessChess} alt="Bitless" className="h-20 w-auto dark:brightness-90" />
             </div>
 
             {/* Right side */}
-            <div className="flex items-center gap-3">
-              <ThemeToggle isDark={isDarkMode} onToggle={toggleDarkMode} />
+            <div className="flex items-center">
               <button
+                onClick={() => setShowPricing(true)}
                 className="px-4 py-1.5 bg-[#D4793A] dark:bg-[#E07A3A] text-white rounded-full hover:opacity-90 transition-opacity text-[13px] font-medium"
               >
                 Upgrade
@@ -123,8 +132,15 @@ function App() {
         </div>
       </header>
 
+      {/* Strapline */}
+      <div className="max-w-xl mx-auto px-5 pt-4 pb-2 text-center pl-8">
+        <p className="text-[15px] text-[#2C2C2C] dark:text-[#E8E6E1]">
+          A bit less screen. A bit more you.
+        </p>
+      </div>
+
       {/* Main Content */}
-      <main className="px-5 pt-10 pb-20">
+      <main className="px-5 pt-4 pb-20">
         {loading ? (
           <div className="max-w-xl mx-auto text-center py-24">
             <div className="inline-flex items-center gap-3">
@@ -144,6 +160,9 @@ function App() {
           </div>
         )}
       </main>
+
+      {/* Pricing Modal */}
+      {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
 
       {/* Footer */}
       <footer className="border-t border-[#E0DCD5]/50 dark:border-[#222222]/80">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 interface PricingModalProps {
   onClose: () => void;
@@ -37,12 +37,12 @@ export function PricingModal({ onClose }: PricingModalProps) {
       accent: true,
     },
     {
-      name: 'Guided (LUD)',
+      name: 'Guided',
       price: '£15',
       period: 'per month',
       features: [
         'Everything in Supporter, plus:',
-        '"Hey LUD" voice agent',
+        'Audio readings (listen, don\'t scroll)',
         'Adaptive daily practices',
         'Crisis mode for doomscrolling',
         'Personal check-ins',
@@ -54,52 +54,62 @@ export function PricingModal({ onClose }: PricingModalProps) {
   ];
 
   return (
-    <div className="fixed inset-0 bg-[#2C2C2C] bg-opacity-40 dark:bg-opacity-60 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-[#F5F3EF] dark:bg-[#1C1C1C] rounded-sm max-w-5xl w-full my-8">
-        <div className="border-b border-[#D4CFC4] dark:border-[#3A3A3A] px-6 py-4">
-          <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-[#2C2C2C] dark:text-[#E8E6E1] mb-2">Support Daily Luddite</h2>
-              <p className="text-[#8B7355] dark:text-[#B5A896] text-[14px] leading-relaxed max-w-2xl">
-                This is a quiet project. No venture capital, no growth hacking, no dark patterns. 
-                Just daily invitations to return to your body. Your support keeps it that way.
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-[#8B7355] dark:text-[#B5A896] hover:text-[#2C2C2C] dark:hover:text-[#E8E6E1] text-[14px] ml-4"
-            >
-              Close
-            </button>
-          </div>
+    <div
+      className="fixed inset-0 bg-black/40 dark:bg-black/60 flex items-center justify-center z-50 p-4 overflow-y-auto"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl max-w-3xl w-full my-8 shadow-2xl overflow-hidden">
+        {/* Header */}
+        <div className="px-8 py-6 relative border-b-2 border-[#D4793A] dark:border-[#E07A3A]">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-[#999] dark:text-[#666] hover:text-[#2C2C2C] dark:hover:text-[#E8E6E1] transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <h2 className="text-[#2C2C2C] dark:text-[#E8E6E1] text-[22px] font-semibold mb-1">Support Bitless</h2>
+          <p className="text-[#888] dark:text-[#777] text-[14px] leading-relaxed max-w-xl">
+            One reading a day. No ads, no tracking, no algorithm. Just a quiet nudge to look up.
+          </p>
         </div>
 
-        <div className="p-6 grid md:grid-cols-3 gap-6">
+        {/* Tiers */}
+        <div className="p-6 grid md:grid-cols-3 gap-4">
           {tiers.map((tier) => (
             <div
               key={tier.name}
               className={`
-                p-6 rounded-sm border-2 transition-all
+                p-5 rounded-xl transition-all
                 ${
                   tier.accent
-                    ? 'border-[#8B9B7C] dark:border-[#7A8A6B] bg-[#F9F8F6] dark:bg-[#252525]'
-                    : 'border-[#E5E1DA] dark:border-[#3A3A3A] bg-white dark:bg-[#202020]'
+                    ? 'bg-[#D4793A]/10 dark:bg-[#E07A3A]/10 ring-2 ring-[#D4793A] dark:ring-[#E07A3A]'
+                    : 'bg-[#F5F2ED] dark:bg-[#222222]'
                 }
               `}
             >
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-[#2C2C2C] dark:text-[#E8E6E1] mb-1">{tier.name}</h3>
+                  <h3 className={`text-[15px] font-semibold mb-1 ${
+                    tier.accent
+                      ? 'text-[#D4793A] dark:text-[#E07A3A]'
+                      : 'text-[#2C2C2C] dark:text-[#E8E6E1]'
+                  }`}>
+                    {tier.name}
+                  </h3>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-[28px] text-[#2C2C2C] dark:text-[#E8E6E1]">{tier.price}</span>
-                    <span className="text-[#8B7355] dark:text-[#B5A896] text-[13px]">{tier.period}</span>
+                    <span className="text-[26px] font-bold text-[#2C2C2C] dark:text-[#E8E6E1]">{tier.price}</span>
+                    <span className="text-[#888] dark:text-[#777] text-[12px]">{tier.period}</span>
                   </div>
                 </div>
 
-                <ul className="space-y-3">
+                <ul className="space-y-2.5">
                   {tier.features.map((feature, index) => (
-                    <li key={index} className="flex gap-3 text-[14px] leading-relaxed">
-                      <Check className="w-4 h-4 text-[#8B9B7C] dark:text-[#7A8A6B] flex-shrink-0 mt-0.5" />
+                    <li key={index} className="flex gap-2.5 text-[13px] leading-relaxed">
+                      <Check className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
+                        tier.accent
+                          ? 'text-[#D4793A] dark:text-[#E07A3A]'
+                          : 'text-[#999] dark:text-[#666]'
+                      }`} />
                       <span className="text-[#2C2C2C] dark:text-[#D4D0C8]">{feature}</span>
                     </li>
                   ))}
@@ -108,13 +118,13 @@ export function PricingModal({ onClose }: PricingModalProps) {
                 <button
                   disabled={tier.disabled}
                   className={`
-                    w-full py-3 rounded-sm text-[14px] transition-all
+                    w-full py-2.5 rounded-lg text-[13px] font-medium transition-all
                     ${
                       tier.accent
-                        ? 'bg-[#8B9B7C] dark:bg-[#7A8A6B] text-white hover:bg-[#7A8A6B] dark:hover:bg-[#6A7A5B]'
-                        : 'bg-[#EBE9E3] dark:bg-[#2A2A2A] text-[#2C2C2C] dark:text-[#E8E6E1] hover:bg-[#D4CFC4] dark:hover:bg-[#353535]'
+                        ? 'bg-[#D4793A] dark:bg-[#E07A3A] text-white hover:opacity-90'
+                        : 'bg-[#E0DCD5] dark:bg-[#333333] text-[#2C2C2C] dark:text-[#E8E6E1]'
                     }
-                    ${tier.disabled ? 'opacity-60 cursor-not-allowed' : ''}
+                    ${tier.disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
                 >
                   {tier.cta}
@@ -124,10 +134,10 @@ export function PricingModal({ onClose }: PricingModalProps) {
           ))}
         </div>
 
-        <div className="border-t border-[#D4CFC4] dark:border-[#3A3A3A] px-6 py-4 bg-[#F9F8F6] dark:bg-[#252525]">
-          <p className="text-[#8B7355] dark:text-[#B5A896] text-[13px] leading-relaxed text-center">
-            All tiers respect your privacy. No tracking, no ads, no data sold. Ever. 
-            Payments processed securely through Stripe.
+        {/* Footer */}
+        <div className="px-8 py-4 bg-[#F9F8F6] dark:bg-[#222222] border-t border-[#E0DCD5] dark:border-[#333333]">
+          <p className="text-[#888] dark:text-[#666] text-[12px] leading-relaxed text-center">
+            Your privacy is respected. No tracking, no ads, no data sold. Ever.
           </p>
         </div>
       </div>
