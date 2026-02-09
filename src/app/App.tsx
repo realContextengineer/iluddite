@@ -28,7 +28,7 @@ function App() {
 
   // Initialize dark mode — default to dark
   useEffect(() => {
-    const stored = localStorage.getItem('dailyluddite-theme');
+    const stored = localStorage.getItem('bitless-theme');
     const shouldBeDark = stored !== 'light'; // Dark unless explicitly set to light
     setIsDarkMode(shouldBeDark);
     if (shouldBeDark) {
@@ -42,10 +42,10 @@ function App() {
     setIsDarkMode(!isDarkMode);
     if (!isDarkMode) {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('dailyluddite-theme', 'dark');
+      localStorage.setItem('bitless-theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('dailyluddite-theme', 'light');
+      localStorage.setItem('bitless-theme', 'light');
     }
   };
 
@@ -107,7 +107,7 @@ function App() {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <img src={iludditeLogo} alt="iLuddite" className="h-10 w-auto" />
+              <span className="text-[22px] font-semibold text-[#1A1A1A] dark:text-[#E8E4DD] tracking-tight">Bitless</span>
             </div>
 
             {/* Right side */}
@@ -154,7 +154,7 @@ function App() {
               Human-paced. Ad-free. No tracking.
             </p>
             <p className="text-[11px] text-[#BBB] dark:text-[#333]">
-              © 2026 <span className="text-[#D4793A] dark:text-[#E07A3A]">i</span>Luddite
+              © 2026 <span className="text-[#D4793A] dark:text-[#E07A3A]">Bit</span>less
             </p>
           </div>
         </div>

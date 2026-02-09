@@ -81,21 +81,24 @@ export function DailyReading({ reading }: DailyReadingProps) {
         </div>
       </AnimateIn>
 
-      {/* Quote Card */}
+      {/* Random Quote Card */}
       <AnimateIn delay={0}>
         <div className="bg-white dark:bg-[#1A1A1A] rounded-2xl p-8 shadow-sm border border-[#E8E4DD]/60 dark:border-[#2A2A2A] transition-colors duration-500">
-          <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-[#D4793A]/10 dark:bg-[#E07A3A]/10 flex items-center justify-center shrink-0 mt-0.5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-8 h-8 rounded-full bg-[#D4793A]/10 dark:bg-[#E07A3A]/10 flex items-center justify-center">
               <Quote className="w-4 h-4 text-[#D4793A] dark:text-[#E07A3A]" />
             </div>
-            <div className="space-y-2">
-              <p className="text-[16px] sm:text-[17px] text-[#1A1A1A] dark:text-[#E8E4DD] leading-[1.7] italic">
-                "{reading.quote}"
-              </p>
-              <p className="text-[12px] text-[#999] dark:text-[#555] font-medium font-mono">
-                — {reading.quoteSource}
-              </p>
-            </div>
+            <h2 className="text-[11px] text-[#999] dark:text-[#555] uppercase tracking-[0.15em] font-semibold font-mono">
+              Random Quote
+            </h2>
+          </div>
+          <div className="space-y-2">
+            <p className="text-[16px] sm:text-[17px] text-[#1A1A1A] dark:text-[#E8E4DD] leading-[1.7] italic">
+              "{reading.quote}"
+            </p>
+            <p className="text-[12px] text-[#999] dark:text-[#555] font-medium font-mono">
+              — {reading.quoteSource}
+            </p>
           </div>
         </div>
       </AnimateIn>
