@@ -1,39 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { DailyReading } from './components/DailyReading';
+import { Routes, Route, Link } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 import { ThemeToggle } from './components/ThemeToggle';
 import { PricingModal } from './components/PricingModal';
-import readingsData from '../data/readings.json';
-import promptsData from '../data/prompts.json';
-import hammerLogo from '../assets/hammer.jpg';
-import iludditeLogo from '../assets/iluddite-logo.png';
-import bitlessLogo from '../assets/bitless-logo.png';
+import { MenuDrawer } from './components/MenuDrawer';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
+import { SignUpPage } from './pages/SignUpPage';
 import bitlessChess from '../assets/bitless-chess.png';
 
-interface Reading {
-  day: number;
-  date: string;
-  title: string;
-  holidayNote?: string;
-  somaticInvitation: string;
-  practice: string;
-  niceSelf: string;
-  niceOther: string;
-  quote: string;
-  quoteSource: string;
-  techBoundary: string;
-  tags: string[];
-}
-
 function App() {
-  const [reading, setReading] = useState<Reading | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [isDarkMode, setIsDarkMode] = useState(true); // Dark by default
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [showPricing, setShowPricing] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
-  // Initialize dark mode — default to dark
   useEffect(() => {
     const stored = localStorage.getItem('bitless-theme');
-    const shouldBeDark = stored !== 'light'; // Dark unless explicitly set to light
+    const shouldBeDark = stored !== 'light';
     setIsDarkMode(shouldBeDark);
     if (shouldBeDark) {
       document.documentElement.classList.add('dark');
@@ -53,56 +37,6 @@ function App() {
     }
   };
 
-  // Fetch today's reading
-  useEffect(() => {
-    const fetchReading = async () => {
-      try {
-        const response = await fetch('/api/today');
-        if (response.ok) {
-          const data = await response.json();
-          setReading(data as Reading);
-          setLoading(false);
-          return;
-        }
-      } catch (error) {
-        console.log('API not available, using fallback readings');
-      }
-
-      const now = new Date();
-      const start = new Date(now.getFullYear(), 0, 0);
-      const diff = now.getTime() - start.getTime();
-      const oneDay = 1000 * 60 * 60 * 24;
-      const dayOfYear = Math.floor(diff / oneDay);
-
-      const localReading = readingsData.find((r) => r.day === dayOfYear);
-      if (localReading) {
-        setReading(localReading as Reading);
-      } else {
-        const todayPrompt = promptsData.find((p) => p.day === dayOfYear);
-        if (todayPrompt) {
-          setReading({
-            day: todayPrompt.day,
-            date: todayPrompt.date,
-            title: todayPrompt.title,
-            somaticInvitation: "Today's reading is being prepared. In the meantime, take a breath. Look away from this screen for a moment. Notice what's around you — the light, the sounds, the temperature of the air. That's the practice. You're already doing it.",
-            practice: "Close your eyes for one minute. Just one. See what your mind does when it's not being fed.",
-            niceSelf: "Make yourself a cup of something warm and drink it without looking at a screen.",
-            niceOther: "Send a short message to someone you haven't spoken to in a while. No reason needed.",
-            quote: "The greatest thing in the world is to know how to belong to oneself.",
-            quoteSource: "Michel de Montaigne",
-            techBoundary: "Put your phone in another room for the next hour. It'll survive. So will you.",
-            tags: ["presence", "rest", "awareness"],
-          });
-        } else {
-          setReading(readingsData[0] as Reading);
-        }
-      }
-      setLoading(false);
-    };
-
-    fetchReading();
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#F5F2ED] dark:bg-[#111111] transition-colors duration-500">
       {/* Header */}
@@ -115,17 +49,18 @@ function App() {
             </div>
 
             {/* Centre logo */}
-            <div className="absolute left-1/2 -translate-x-1/2">
-              <img src={bitlessChess} alt="Bitless" className="h-20 w-auto dark:brightness-90" />
-            </div>
+            <Link to="/" className="absolute left-1/2 -translate-x-1/2">
+              <img src={bitlessChess} alt="Bitless" className="h-20 w-auto dark:brightness-90 animate-logo-pulse" />
+            </Link>
 
-            {/* Right side */}
+            {/* Right side — hamburger menu */}
             <div className="flex items-center">
               <button
-                onClick={() => setShowPricing(true)}
-                className="px-4 py-1.5 bg-[#D4793A] dark:bg-[#E07A3A] text-white rounded-full hover:opacity-90 transition-opacity text-[13px] font-medium"
+                onClick={() => setShowMenu(true)}
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#E8E4DD]/60 dark:hover:bg-[#2A2A2A] transition-colors"
+                aria-label="Open menu"
               >
-                Upgrade
+                <Menu className="w-5 h-5 text-[#666] dark:text-[#888]" />
               </button>
             </div>
           </div>
@@ -141,25 +76,20 @@ function App() {
 
       {/* Main Content */}
       <main className="px-5 pt-4 pb-20">
-        {loading ? (
-          <div className="max-w-xl mx-auto text-center py-24">
-            <div className="inline-flex items-center gap-3">
-              <div className="w-5 h-5 border-2 border-[#E07A3A]/30 border-t-[#E07A3A] rounded-full animate-spin" />
-              <p className="text-[#888] dark:text-[#666] text-[14px]">
-                Loading today's reading...
-              </p>
-            </div>
-          </div>
-        ) : reading ? (
-          <DailyReading reading={reading} />
-        ) : (
-          <div className="max-w-xl mx-auto text-center py-24">
-            <p className="text-[#888] dark:text-[#666] text-[14px]">
-              No reading available. Check back soon.
-            </p>
-          </div>
-        )}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+        </Routes>
       </main>
+
+      {/* Menu Drawer */}
+      <MenuDrawer
+        isOpen={showMenu}
+        onClose={() => setShowMenu(false)}
+        onUpgrade={() => setShowPricing(true)}
+      />
 
       {/* Pricing Modal */}
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
