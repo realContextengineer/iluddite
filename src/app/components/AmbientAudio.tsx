@@ -3,57 +3,110 @@ import { Volume2, VolumeX } from 'lucide-react';
 
 interface AmbientAudioProps {
   src: string;
+  musicSrc?: string;
 }
 
-export function AmbientAudio({ src }: AmbientAudioProps) {
+export function AmbientAudio({ src, musicSrc }: AmbientAudioProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const stored = typeof window !== 'undefined' ? localStorage.getItem('bitless-ambient') : null;
-  const [isPlaying, setIsPlaying] = useState(stored !== 'off');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const musicRef = useRef<HTMLAudioElement | null>(null);
+  const storedPref = typeof window !== 'undefined' ? localStorage.getItem('bitless-ambient') : null;
+  const [isPlaying, setIsPlaying] = useState(storedPref !== 'off');
   const fadeInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const musicFadeInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const TARGET_VOLUME = 0.15;
-  const FADE_DURATION = 2000; // 2s fade
+  const FOREST_VOLUME = 0.15;
+  const MUSIC_VOLUME = 0.06;
   const FADE_STEPS = 40;
+  const FADE_MS = 50;
+
+  const fadeAudio = (audio: HTMLAudioElement, target: number, intervalRef: React.MutableRefObject<ReturnType<typeof setInterval> | null>) => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    const startVol = audio.volume;
+    const stepSize = (target - startVol) / FADE_STEPS;
+    let step = 0;
+    intervalRef.current = setInterval(() => {
+      step++;
+      audio.volume = Math.max(0, Math.min(1, startVol + stepSize * step));
+      if (step >= FADE_STEPS) {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        audio.volume = target;
+        if (target === 0) audio.pause();
+      }
+    }, FADE_MS);
+  };
+
+  const playBoth = useCallback(() => {
+    const forest = audioRef.current;
+    const music = musicRef.current;
+
+    const startForest = () => {
+      if (!forest) return;
+      forest.play().then(() => {
+        forest.volume = 0;
+        fadeAudio(forest, FOREST_VOLUME, fadeInterval);
+      }).catch(() => {});
+    };
+
+    const startMusic = () => {
+      if (!music) return;
+      music.play().then(() => {
+        music.volume = 0;
+        fadeAudio(music, MUSIC_VOLUME, musicFadeInterval);
+      }).catch(() => {});
+    };
+
+    startForest();
+    startMusic();
+    setIsPlaying(true);
+  }, []);
+
+  const stopBoth = useCallback(() => {
+    if (audioRef.current) fadeAudio(audioRef.current, 0, fadeInterval);
+    if (musicRef.current) fadeAudio(musicRef.current, 0, musicFadeInterval);
+    setIsPlaying(false);
+  }, []);
 
   useEffect(() => {
-    const audio = new Audio(src);
-    audio.loop = true;
-    audio.volume = 0;
-    audio.preload = 'auto';
-    audioRef.current = audio;
+    const forest = new Audio(src);
+    forest.loop = true;
+    forest.volume = 0;
+    forest.preload = 'auto';
+    audioRef.current = forest;
 
-    audio.addEventListener('canplaythrough', () => setIsLoaded(true));
+    let music: HTMLAudioElement | null = null;
+    if (musicSrc) {
+      music = new Audio(musicSrc);
+      music.loop = true;
+      music.volume = 0;
+      music.preload = 'auto';
+      musicRef.current = music;
+    }
 
-    // Auto-play on load (unless user previously turned it off)
     const stored = localStorage.getItem('bitless-ambient');
-    if (stored === 'off') {
-      // User explicitly turned it off — respect that
-    } else {
-      // Try to autoplay immediately
+    if (stored !== 'off') {
       const tryPlay = () => {
-        audio.play().then(() => {
+        forest.play().then(() => {
           setIsPlaying(true);
-          audio.volume = 0;
-          // Fade in
-          let step = 0;
-          const interval = setInterval(() => {
-            step++;
-            audio.volume = Math.min(0.15, (step / 40) * 0.15);
-            if (step >= 40) clearInterval(interval);
-          }, 50);
+          forest.volume = 0;
+          fadeAudio(forest, FOREST_VOLUME, fadeInterval);
+          if (music) {
+            music.play().then(() => {
+              music!.volume = 0;
+              fadeAudio(music!, MUSIC_VOLUME, musicFadeInterval);
+            }).catch(() => {});
+          }
         }).catch(() => {
-          // Browser blocked autoplay — start on first click
           const startOnInteraction = () => {
-            audio.play().then(() => {
+            forest.play().then(() => {
               setIsPlaying(true);
-              audio.volume = 0;
-              let step = 0;
-              const interval = setInterval(() => {
-                step++;
-                audio.volume = Math.min(0.15, (step / 40) * 0.15);
-                if (step >= 40) clearInterval(interval);
-              }, 50);
+              forest.volume = 0;
+              fadeAudio(forest, FOREST_VOLUME, fadeInterval);
+              if (music) {
+                music.play().then(() => {
+                  music!.volume = 0;
+                  fadeAudio(music!, MUSIC_VOLUME, musicFadeInterval);
+                }).catch(() => {});
+              }
             }).catch(() => {});
             document.removeEventListener('click', startOnInteraction);
             document.removeEventListener('touchstart', startOnInteraction);
@@ -62,58 +115,27 @@ export function AmbientAudio({ src }: AmbientAudioProps) {
           document.addEventListener('touchstart', startOnInteraction, { once: true });
         });
       };
-      audio.addEventListener('canplaythrough', tryPlay, { once: true });
+      forest.addEventListener('canplaythrough', tryPlay, { once: true });
     }
 
     return () => {
-      audio.pause();
-      audio.src = '';
+      forest.pause();
+      forest.src = '';
+      if (music) { music.pause(); music.src = ''; }
       if (fadeInterval.current) clearInterval(fadeInterval.current);
+      if (musicFadeInterval.current) clearInterval(musicFadeInterval.current);
     };
-  }, [src]);
-
-  const fadeTo = useCallback((target: number) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (fadeInterval.current) clearInterval(fadeInterval.current);
-
-    const startVol = audio.volume;
-    const diff = target - startVol;
-    const stepSize = diff / FADE_STEPS;
-    let step = 0;
-
-    fadeInterval.current = setInterval(() => {
-      step++;
-      const newVol = Math.max(0, Math.min(1, startVol + stepSize * step));
-      audio.volume = newVol;
-
-      if (step >= FADE_STEPS) {
-        if (fadeInterval.current) clearInterval(fadeInterval.current);
-        audio.volume = target;
-        if (target === 0) audio.pause();
-      }
-    }, FADE_DURATION / FADE_STEPS);
-  }, []);
+  }, [src, musicSrc]);
 
   const toggle = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio || !isLoaded) return;
-
     if (isPlaying) {
-      fadeTo(0);
-      setIsPlaying(false);
+      stopBoth();
       localStorage.setItem('bitless-ambient', 'off');
     } else {
-      audio.play().then(() => {
-        fadeTo(TARGET_VOLUME);
-        setIsPlaying(true);
-        localStorage.setItem('bitless-ambient', 'on');
-      }).catch(() => {
-        // Autoplay blocked — user needs to interact first
-      });
+      playBoth();
+      localStorage.setItem('bitless-ambient', 'on');
     }
-  }, [isPlaying, isLoaded, fadeTo]);
+  }, [isPlaying, playBoth, stopBoth]);
 
   return (
     <button
@@ -126,8 +148,8 @@ export function AmbientAudio({ src }: AmbientAudioProps) {
           : 'hover:bg-[#E2EBE0]/60 dark:hover:bg-[#202A24]'
         }
       `}
-      aria-label={isPlaying ? 'Mute forest sounds' : 'Play forest sounds'}
-      title={isPlaying ? 'Forest sounds on' : 'Forest sounds off'}
+      aria-label={isPlaying ? 'Mute sounds' : 'Play sounds'}
+      title={isPlaying ? 'Sounds on' : 'Sounds off'}
     >
       {isPlaying ? (
         <Volume2 className="w-4 h-4 text-[#6B8E5F] dark:text-[#7A9D6D] animate-pulse" />

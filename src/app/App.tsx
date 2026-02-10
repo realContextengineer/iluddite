@@ -12,6 +12,7 @@ import { AmbientAudio } from './components/AmbientAudio';
 import bitlessChess from '../assets/bitless-plug.png';
 import forestBg from '../assets/forest.jpg';
 import forestAudio from '../assets/forest-ambient.mp3';
+import ambientMusic from '../assets/ambient-music.mp3';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -55,7 +56,7 @@ function App() {
             {/* Left side */}
             <div className="flex items-center gap-1">
               <ThemeToggle isDark={isDarkMode} onToggle={toggleDarkMode} />
-              <AmbientAudio src={forestAudio} />
+              <AmbientAudio src={forestAudio} musicSrc={ambientMusic} />
             </div>
 
             {/* Centre logo */}
