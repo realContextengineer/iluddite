@@ -26,13 +26,13 @@ export function DateBrowser({ onClose, onSelectDate, currentDay }: DateBrowserPr
   let dayCounter = 1;
 
   return (
-    <div className="fixed inset-0 bg-[#2C2C2C] bg-opacity-40 dark:bg-opacity-60 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#F5F3EF] dark:bg-[#1C1C1C] rounded-sm max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-[#F5F3EF] dark:bg-[#1C1C1C] border-b border-[#D4CFC4] dark:border-[#3A3A3A] px-6 py-4 flex justify-between items-center">
-          <h2 className="text-[#2C2C2C] dark:text-[#E8E6E1]">Browse All Days</h2>
+    <div className="fixed inset-0 bg-[#1A2A1F] bg-opacity-40 dark:bg-opacity-60 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#F4F7F3] dark:bg-[#161C18] rounded-sm max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-[#F4F7F3] dark:bg-[#161C18] border-b border-[#CED9CB] dark:border-[#2A3A30] px-6 py-4 flex justify-between items-center">
+          <h2 className="text-[#1A2A1F] dark:text-[#E8EBE6]">Browse All Days</h2>
           <button
             onClick={onClose}
-            className="text-[#8B7355] dark:text-[#B5A896] hover:text-[#2C2C2C] dark:hover:text-[#E8E6E1] transition-colors"
+            className="text-[#6B8560] dark:text-[#A8B8A0] hover:text-[#1A2A1F] dark:hover:text-[#E8EBE6] transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -49,7 +49,7 @@ export function DateBrowser({ onClose, onSelectDate, currentDay }: DateBrowserPr
 
             return (
               <div key={month.name} className="space-y-3">
-                <h3 className="text-[#8B7355] dark:text-[#B5A896] text-[13px] uppercase tracking-wider">
+                <h3 className="text-[#6B8560] dark:text-[#A8B8A0] text-[13px] uppercase tracking-wider">
                   {month.name}
                 </h3>
                 <div className="grid grid-cols-7 sm:grid-cols-10 md:grid-cols-15 gap-2">
@@ -64,8 +64,8 @@ export function DateBrowser({ onClose, onSelectDate, currentDay }: DateBrowserPr
                         py-3 px-2 rounded-sm text-[14px] transition-all
                         ${
                           day === currentDay
-                            ? 'bg-[#8B9B7C] dark:bg-[#7A8A6B] text-white'
-                            : 'bg-[#EBE9E3] dark:bg-[#2A2A2A] text-[#2C2C2C] dark:text-[#E8E6E1] hover:bg-[#D4CFC4] dark:hover:bg-[#353535]'
+                            ? 'bg-[#7A9D6D] dark:bg-[#6B8E5F] text-white'
+                            : 'bg-[#E9EDE8] dark:bg-[#202A24] text-[#1A2A1F] dark:text-[#E8EBE6] hover:bg-[#CED9CB] dark:hover:bg-[#2A3A2F]'
                         }
                       `}
                     >

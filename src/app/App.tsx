@@ -38,9 +38,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F2ED] dark:bg-[#111111] transition-colors duration-500">
+    <div className="min-h-screen bg-[#F5F7F4] dark:bg-[#0F1410] transition-colors duration-500">
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#F5F2ED]/80 dark:bg-[#111111]/80 border-b border-[#E0DCD5]/50 dark:border-[#222222]/80">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#F5F7F4]/80 dark:bg-[#0F1410]/80 border-b border-[#D9E3D6]/50 dark:border-[#1A221D]/80">
         <div className="max-w-xl mx-auto px-5 relative">
           <div className="flex items-center justify-between h-24">
             {/* Left side */}
@@ -57,10 +57,10 @@ function App() {
             <div className="flex items-center">
               <button
                 onClick={() => setShowMenu(true)}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#E8E4DD]/60 dark:hover:bg-[#2A2A2A] transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#E2EBE0]/60 dark:hover:bg-[#202A24] transition-colors"
                 aria-label="Open menu"
               >
-                <Menu className="w-5 h-5 text-[#666] dark:text-[#888]" />
+                <Menu className="w-5 h-5 text-[#5A6A5E] dark:text-[#7A8A7E]" />
               </button>
             </div>
           </div>
@@ -69,8 +69,8 @@ function App() {
 
       {/* Strapline */}
       <div className="max-w-xl mx-auto px-5 pt-4 pb-2 text-center pl-8">
-        <p className="text-[15px] text-[#2C2C2C] dark:text-[#E8E6E1]">
-          A bit less screen. A bit more you.
+        <p className="text-[20px] text-[#1A2A1F] dark:text-[#E8EBE6] animate-text-breathe">
+          Bitless Screen. A bit more you time.
         </p>
       </div>
 
@@ -95,15 +95,15 @@ function App() {
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
 
       {/* Footer */}
-      <footer className="border-t border-[#E0DCD5]/50 dark:border-[#222222]/80">
+      <footer className="border-t border-[#D9E3D6]/50 dark:border-[#1A221D]/80">
         <div className="max-w-xl mx-auto px-5 py-10">
           <div className="text-center space-y-3">
-            <p className="text-[13px] text-[#999] dark:text-[#555] leading-relaxed">
+            <p className="text-[13px] text-[#8A9488] dark:text-[#4A5A4E] leading-relaxed">
               A daily practice in unplugging.<br />
               Human-paced. Ad-free. No tracking.
             </p>
-            <p className="text-[11px] text-[#BBB] dark:text-[#333]">
-              © 2026 <span className="text-[#D4793A] dark:text-[#E07A3A]">Bit</span>less
+            <p className="text-[11px] text-[#B8C2B6] dark:text-[#2A3A2E]">
+              © 2026 <span className="text-[#6B8E5F] dark:text-[#7A9D6D]">Bit</span>less
             </p>
           </div>
         </div>

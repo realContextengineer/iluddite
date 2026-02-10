@@ -58,14 +58,14 @@ export function BreathIndicator() {
   return (
     <div className="flex flex-col items-center gap-6 py-12">
       <motion.div
-        className="w-24 h-24 rounded-full bg-[#8B9B7C] dark:bg-[#7A8A6B] opacity-30"
+        className="w-24 h-24 rounded-full bg-[#7A9D6D] dark:bg-[#6B8E5F] opacity-30"
         animate={{ scale: getScale() }}
         transition={{
           duration: getDuration(),
           ease: 'easeInOut',
         }}
       />
-      <p className="text-[#8B7355] dark:text-[#B5A896] text-[14px] tracking-wide">
+      <p className="text-[#6B8560] dark:text-[#A8B8A0] text-[14px] tracking-wide">
         {getText()}
       </p>
     </div>

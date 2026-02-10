@@ -75,8 +75,8 @@ export function HomePage() {
     return (
       <div className="max-w-xl mx-auto text-center py-24">
         <div className="inline-flex items-center gap-3">
-          <div className="w-5 h-5 border-2 border-[#E07A3A]/30 border-t-[#E07A3A] rounded-full animate-spin" />
-          <p className="text-[#888] dark:text-[#666] text-[14px]">
+          <div className="w-5 h-5 border-2 border-[#7A9D6D]/30 border-t-[#7A9D6D] rounded-full animate-spin" />
+          <p className="text-[#7A8A7E] dark:text-[#5A6A5E] text-[14px]">
             Loading today's reading...
           </p>
         </div>
@@ -87,7 +87,7 @@ export function HomePage() {
   if (!reading) {
     return (
       <div className="max-w-xl mx-auto text-center py-24">
-        <p className="text-[#888] dark:text-[#666] text-[14px]">
+        <p className="text-[#7A8A7E] dark:text-[#5A6A5E] text-[14px]">
           No reading available. Check back soon.
         </p>
       </div>

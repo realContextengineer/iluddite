@@ -19,5 +19,64 @@
 }
 
 .animate-logo-pulse {
-  animation: logo-pulse 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: logo-pulse 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+             logo-breathe 5s ease-in-out 1.5s infinite;
+}
+
+/* Living, breathing logo — like a tree in the wind */
+@keyframes logo-breathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(107, 142, 95, 0.15));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 18px rgba(107, 142, 95, 0.45));
+  }
+}
+
+/* Strapline gentle breathing animation */
+@keyframes text-breathe {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-text-breathe {
+  animation: text-breathe 4s ease-in-out infinite;
+}
+
+/* Card breathing — inhale 4s, exhale 6s (10s total cycle) */
+@keyframes card-breathe {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0px rgba(107, 142, 95, 0);
+  }
+  40% {
+    transform: scale(1.015);
+    box-shadow: 0 0 24px rgba(107, 142, 95, 0.15);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0px rgba(107, 142, 95, 0);
+  }
+}
+
+.animate-card-breathe {
+  animation: card-breathe 10s ease-in-out infinite;
+}
+
+.animate-card-breathe-delayed {
+  animation: card-breathe 10s ease-in-out 2.5s infinite;
+}
+
+.animate-card-breathe-delayed-2 {
+  animation: card-breathe 10s ease-in-out 5s infinite;
+}
+
+.animate-card-breathe-delayed-3 {
+  animation: card-breathe 10s ease-in-out 7.5s infinite;
 }
