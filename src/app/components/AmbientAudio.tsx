@@ -7,7 +7,8 @@ interface AmbientAudioProps {
 
 export function AmbientAudio({ src }: AmbientAudioProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const stored = typeof window !== 'undefined' ? localStorage.getItem('bitless-ambient') : null;
+  const [isPlaying, setIsPlaying] = useState(stored !== 'off');
   const [isLoaded, setIsLoaded] = useState(false);
   const fadeInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -43,7 +44,7 @@ export function AmbientAudio({ src }: AmbientAudioProps) {
           }, 50);
         }).catch(() => {
           // Browser blocked autoplay — start on first click
-          const startOnClick = () => {
+          const startOnInteraction = () => {
             audio.play().then(() => {
               setIsPlaying(true);
               audio.volume = 0;
@@ -54,9 +55,11 @@ export function AmbientAudio({ src }: AmbientAudioProps) {
                 if (step >= 40) clearInterval(interval);
               }, 50);
             }).catch(() => {});
-            document.removeEventListener('click', startOnClick);
+            document.removeEventListener('click', startOnInteraction);
+            document.removeEventListener('touchstart', startOnInteraction);
           };
-          document.addEventListener('click', startOnClick, { once: true });
+          document.addEventListener('click', startOnInteraction, { once: true });
+          document.addEventListener('touchstart', startOnInteraction, { once: true });
         });
       };
       audio.addEventListener('canplaythrough', tryPlay, { once: true });
@@ -111,8 +114,6 @@ export function AmbientAudio({ src }: AmbientAudioProps) {
       });
     }
   }, [isPlaying, isLoaded, fadeTo]);
-
-  if (!isLoaded) return null;
 
   return (
     <button
