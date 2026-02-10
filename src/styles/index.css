@@ -52,16 +52,16 @@
 /* Card breathing — inhale 4s, exhale 6s (10s total cycle) */
 @keyframes card-breathe {
   0% {
-    transform: scale(1);
     box-shadow: 0 0 0px rgba(107, 142, 95, 0);
+    border-color: rgba(107, 142, 95, 0.12);
   }
   40% {
-    transform: scale(1.015);
     box-shadow: 0 0 24px rgba(107, 142, 95, 0.15);
+    border-color: rgba(107, 142, 95, 0.35);
   }
   100% {
-    transform: scale(1);
     box-shadow: 0 0 0px rgba(107, 142, 95, 0);
+    border-color: rgba(107, 142, 95, 0.12);
   }
 }
 

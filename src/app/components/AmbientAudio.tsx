@@ -24,11 +24,42 @@ export function AmbientAudio({ src }: AmbientAudioProps) {
 
     audio.addEventListener('canplaythrough', () => setIsLoaded(true));
 
-    // Restore state from localStorage
+    // Auto-play on load (unless user previously turned it off)
     const stored = localStorage.getItem('bitless-ambient');
-    if (stored === 'on') {
-      // User previously had audio on — we'll show the icon as "on"
-      // but can't autoplay without interaction, so we wait
+    if (stored === 'off') {
+      // User explicitly turned it off — respect that
+    } else {
+      // Try to autoplay immediately
+      const tryPlay = () => {
+        audio.play().then(() => {
+          setIsPlaying(true);
+          audio.volume = 0;
+          // Fade in
+          let step = 0;
+          const interval = setInterval(() => {
+            step++;
+            audio.volume = Math.min(0.15, (step / 40) * 0.15);
+            if (step >= 40) clearInterval(interval);
+          }, 50);
+        }).catch(() => {
+          // Browser blocked autoplay — start on first click
+          const startOnClick = () => {
+            audio.play().then(() => {
+              setIsPlaying(true);
+              audio.volume = 0;
+              let step = 0;
+              const interval = setInterval(() => {
+                step++;
+                audio.volume = Math.min(0.15, (step / 40) * 0.15);
+                if (step >= 40) clearInterval(interval);
+              }, 50);
+            }).catch(() => {});
+            document.removeEventListener('click', startOnClick);
+          };
+          document.addEventListener('click', startOnClick, { once: true });
+        });
+      };
+      audio.addEventListener('canplaythrough', tryPlay, { once: true });
     }
 
     return () => {

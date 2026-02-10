@@ -44,7 +44,7 @@ function App() {
     <div className="min-h-screen bg-[#F5F7F4] dark:bg-[#0F1410] transition-colors duration-500 relative">
       {/* Forest background image */}
       <div
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.06] dark:opacity-[0.08] pointer-events-none"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.25] dark:opacity-[0.20] pointer-events-none"
         style={{ backgroundImage: `url(${forestBg})` }}
       />
 
@@ -79,7 +79,7 @@ function App() {
 
       {/* Strapline */}
       <div className="relative z-10 max-w-xl mx-auto px-5 pt-4 pb-2 text-center pl-8">
-        <p className="text-[20px] text-[#1A2A1F] dark:text-[#E8EBE6] animate-text-breathe">
+        <p className="text-[20px] text-[#1A2A1F] dark:text-[#E8EBE6]">
           Bitless Screen. A bit more you time.
         </p>
       </div>
