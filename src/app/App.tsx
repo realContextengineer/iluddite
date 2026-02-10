@@ -8,7 +8,7 @@ import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { SignUpPage } from './pages/SignUpPage';
-import bitlessChess from '../assets/bitless-chess.png';
+import bitlessChess from '../assets/bitless-plug.png';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
