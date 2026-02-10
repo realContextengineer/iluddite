@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 
 /* Custom speaking-head SVG — side-profile silhouette with sound waves */
 function SpeakingHead({ className }: { className?: string }) {
@@ -17,56 +17,30 @@ function SpeakingHead({ className }: { className?: string }) {
   );
 }
 
-/* Find the best available English voice */
-function findBestVoice(): SpeechSynthesisVoice | null {
-  const voices = window.speechSynthesis.getVoices();
-  const englishVoices = voices.filter(v => v.lang.startsWith('en'));
-  if (!englishVoices.length) return null;
-
-  // Prefer premium/enhanced voices (Apple, Google, Microsoft high-quality)
-  const premium = englishVoices.find(v =>
-    v.name.includes('Premium') || v.name.includes('Enhanced') ||
-    v.name.includes('Neural') || v.name.includes('Natural')
-  );
-  if (premium) return premium;
-
-  // Fallback to known good voices
-  const preferredNames = ['Daniel', 'James', 'Oliver', 'Aaron', 'Arthur', 'Rishi', 'Samantha', 'Karen', 'Moira', 'Fiona', 'Martha'];
-  return preferredNames
-    .map(name => englishVoices.find(v => v.name.includes(name)))
-    .find(Boolean) || null;
-}
+/* Global puter type — loaded via script tag in index.html */
+declare const puter: {
+  ai: {
+    txt2speech: (text: string, options?: Record<string, unknown>) => Promise<HTMLAudioElement>;
+  };
+};
 
 export function VoiceReading() {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const cachedVoice = useRef<SpeechSynthesisVoice | null>(null);
-
-  // Pre-load voices as soon as they're available
-  useEffect(() => {
-    const loadVoices = () => {
-      cachedVoice.current = findBestVoice();
-    };
-
-    // Try immediately (voices may already be loaded)
-    loadVoices();
-
-    // Also listen for the async voiceschanged event
-    window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
-
-    return () => {
-      window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
-      window.speechSynthesis.cancel();
-    };
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const stop = useCallback(() => {
-    window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
     setIsSpeaking(false);
+    setIsLoading(false);
   }, []);
 
-  const speak = useCallback(() => {
-    if (isSpeaking) {
+  const speak = useCallback(async () => {
+    if (isSpeaking || isLoading) {
       stop();
       return;
     }
@@ -75,25 +49,46 @@ export function VoiceReading() {
     const main = document.querySelector('main');
     if (!main) return;
 
-    const text = main.innerText || main.textContent || '';
-    if (!text.trim()) return;
+    const text = (main.innerText || main.textContent || '').trim();
+    if (!text) return;
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.85;
-    utterance.pitch = 0.95;
-    utterance.lang = 'en-GB';
+    // Puter.js has a 3000 char limit — truncate gracefully at sentence boundary
+    let truncated = text;
+    if (truncated.length > 2900) {
+      truncated = truncated.slice(0, 2900);
+      const lastSentence = truncated.lastIndexOf('.');
+      if (lastSentence > 2000) truncated = truncated.slice(0, lastSentence + 1);
+    }
 
-    // Use pre-cached voice, or try finding one now as fallback
-    const voice = cachedVoice.current || findBestVoice();
-    if (voice) utterance.voice = voice;
+    setIsLoading(true);
 
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
+    try {
+      const audio = await puter.ai.txt2speech(truncated, {
+        provider: 'openai',
+        model: 'tts-1',
+        voice: 'nova',
+        instructions: 'Speak calmly and soothingly, like a gentle meditation guide reading a daily reflection. Moderate pace, warm tone.',
+      });
 
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-    setIsSpeaking(true);
-  }, [isSpeaking, stop]);
+      audioRef.current = audio;
+      audio.onended = () => {
+        setIsSpeaking(false);
+        audioRef.current = null;
+      };
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        setIsLoading(false);
+        audioRef.current = null;
+      };
+
+      await audio.play();
+      setIsLoading(false);
+      setIsSpeaking(true);
+    } catch {
+      setIsLoading(false);
+      setIsSpeaking(false);
+    }
+  }, [isSpeaking, isLoading, stop]);
 
   return (
     <button
@@ -103,17 +98,21 @@ export function VoiceReading() {
         transition-all duration-500 border
         ${isSpeaking
           ? 'bg-[#6B8E5F]/15 dark:bg-[#7A9D6D]/15 border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40 shadow-[0_0_12px_rgba(107,142,95,0.4)] dark:shadow-[0_0_12px_rgba(122,157,109,0.3)]'
-          : 'bg-[#E2EBE0]/40 dark:bg-[#1A221D]/60 border-[#D9E3D6]/50 dark:border-[#202A24] hover:border-[#6B8E5F]/30 dark:hover:border-[#7A9D6D]/30 hover:shadow-[0_0_8px_rgba(107,142,95,0.2)] dark:hover:shadow-[0_0_8px_rgba(122,157,109,0.15)]'
+          : isLoading
+            ? 'bg-[#6B8E5F]/10 dark:bg-[#7A9D6D]/10 border-[#6B8E5F]/25 dark:border-[#7A9D6D]/25'
+            : 'bg-[#E2EBE0]/40 dark:bg-[#1A221D]/60 border-[#D9E3D6]/50 dark:border-[#202A24] hover:border-[#6B8E5F]/30 dark:hover:border-[#7A9D6D]/30 hover:shadow-[0_0_8px_rgba(107,142,95,0.2)] dark:hover:shadow-[0_0_8px_rgba(122,157,109,0.15)]'
         }
       `}
-      aria-label={isSpeaking ? 'Stop reading' : 'Read aloud'}
-      title={isSpeaking ? 'Stop reading' : 'Read aloud'}
+      aria-label={isSpeaking ? 'Stop reading' : isLoading ? 'Loading voice...' : 'Read aloud'}
+      title={isSpeaking ? 'Stop reading' : isLoading ? 'Loading...' : 'Read aloud'}
     >
       <SpeakingHead
         className={`w-5 h-5 ${
           isSpeaking
             ? 'text-[#6B8E5F] dark:text-[#7A9D6D] animate-pulse'
-            : 'text-[#5A6A5E] dark:text-[#7A8A7E]'
+            : isLoading
+              ? 'text-[#6B8E5F]/50 dark:text-[#7A9D6D]/50 animate-pulse'
+              : 'text-[#5A6A5E] dark:text-[#7A8A7E]'
         }`}
       />
     </button>
