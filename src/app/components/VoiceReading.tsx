@@ -17,9 +17,48 @@ function SpeakingHead({ className }: { className?: string }) {
   );
 }
 
+/* Find the best available English voice */
+function findBestVoice(): SpeechSynthesisVoice | null {
+  const voices = window.speechSynthesis.getVoices();
+  const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+  if (!englishVoices.length) return null;
+
+  // Prefer premium/enhanced voices (Apple, Google, Microsoft high-quality)
+  const premium = englishVoices.find(v =>
+    v.name.includes('Premium') || v.name.includes('Enhanced') ||
+    v.name.includes('Neural') || v.name.includes('Natural')
+  );
+  if (premium) return premium;
+
+  // Fallback to known good voices
+  const preferredNames = ['Daniel', 'James', 'Oliver', 'Aaron', 'Arthur', 'Rishi', 'Samantha', 'Karen', 'Moira', 'Fiona', 'Martha'];
+  return preferredNames
+    .map(name => englishVoices.find(v => v.name.includes(name)))
+    .find(Boolean) || null;
+}
+
 export function VoiceReading() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const cachedVoice = useRef<SpeechSynthesisVoice | null>(null);
+
+  // Pre-load voices as soon as they're available
+  useEffect(() => {
+    const loadVoices = () => {
+      cachedVoice.current = findBestVoice();
+    };
+
+    // Try immediately (voices may already be loaded)
+    loadVoices();
+
+    // Also listen for the async voiceschanged event
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+
+    return () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const stop = useCallback(() => {
     window.speechSynthesis.cancel();
@@ -44,25 +83,9 @@ export function VoiceReading() {
     utterance.pitch = 0.95;
     utterance.lang = 'en-GB';
 
-    // Try to find a calm, natural-sounding English voice
-    // Premium/enhanced voices first, then standard quality ones
-    const voices = window.speechSynthesis.getVoices();
-    const englishVoices = voices.filter(v => v.lang.startsWith('en'));
-
-    // Prefer premium/enhanced voices (Apple, Google, Microsoft high-quality)
-    const premium = englishVoices.find(v =>
-      v.name.includes('Premium') || v.name.includes('Enhanced') ||
-      v.name.includes('Neural') || v.name.includes('Natural')
-    );
-
-    // Fallback to known good voices
-    const preferredNames = ['Daniel', 'James', 'Oliver', 'Aaron', 'Arthur', 'Rishi', 'Samantha', 'Karen', 'Moira', 'Fiona', 'Martha'];
-    const known = preferredNames
-      .map(name => englishVoices.find(v => v.name.includes(name)))
-      .find(Boolean);
-
-    const bestVoice = premium || known;
-    if (bestVoice) utterance.voice = bestVoice;
+    // Use pre-cached voice, or try finding one now as fallback
+    const voice = cachedVoice.current || findBestVoice();
+    if (voice) utterance.voice = voice;
 
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
@@ -71,13 +94,6 @@ export function VoiceReading() {
     window.speechSynthesis.speak(utterance);
     setIsSpeaking(true);
   }, [isSpeaking, stop]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, []);
 
   return (
     <button
