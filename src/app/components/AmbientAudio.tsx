@@ -84,30 +84,33 @@ export function AmbientAudio({ src, musicSrc }: AmbientAudioProps) {
 
     const stored = localStorage.getItem('bitless-ambient');
     if (stored !== 'off') {
+      const startBoth = () => {
+        forest.volume = 0;
+        forest.play().then(() => {
+          fadeAudio(forest, FOREST_VOLUME, fadeInterval);
+        }).catch(() => {});
+        if (music) {
+          music.volume = 0;
+          music.play().then(() => {
+            fadeAudio(music!, MUSIC_VOLUME, musicFadeInterval);
+          }).catch(() => {});
+        }
+      };
+
       const tryPlay = () => {
         forest.play().then(() => {
-          setIsPlaying(true);
           forest.volume = 0;
           fadeAudio(forest, FOREST_VOLUME, fadeInterval);
           if (music) {
+            music.volume = 0;
             music.play().then(() => {
-              music!.volume = 0;
               fadeAudio(music!, MUSIC_VOLUME, musicFadeInterval);
             }).catch(() => {});
           }
         }).catch(() => {
+          // Browser blocked — start on first interaction
           const startOnInteraction = () => {
-            forest.play().then(() => {
-              setIsPlaying(true);
-              forest.volume = 0;
-              fadeAudio(forest, FOREST_VOLUME, fadeInterval);
-              if (music) {
-                music.play().then(() => {
-                  music!.volume = 0;
-                  fadeAudio(music!, MUSIC_VOLUME, musicFadeInterval);
-                }).catch(() => {});
-              }
-            }).catch(() => {});
+            startBoth();
             document.removeEventListener('click', startOnInteraction);
             document.removeEventListener('touchstart', startOnInteraction);
           };
@@ -116,6 +119,8 @@ export function AmbientAudio({ src, musicSrc }: AmbientAudioProps) {
         });
       };
       forest.addEventListener('canplaythrough', tryPlay, { once: true });
+    } else {
+      setIsPlaying(false);
     }
 
     return () => {
