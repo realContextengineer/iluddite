@@ -50,7 +50,7 @@ function App() {
 
             {/* Centre logo */}
             <Link to="/" className="absolute left-1/2 -translate-x-1/2">
-              <img src={bitlessChess} alt="Bitless" className="h-20 w-auto dark:brightness-90 animate-logo-pulse" />
+              <img src={bitlessChess} alt="Bitless" className="h-48 w-auto dark:brightness-90 animate-logo-pulse" />
             </Link>
 
             {/* Right side — hamburger menu */}
