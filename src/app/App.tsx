@@ -79,10 +79,17 @@ function App() {
       </header>
 
       {/* Strapline */}
-      <div className="relative z-10 max-w-xl mx-auto px-5 pt-4 pb-2 text-center pl-8">
-        <p className="text-[20px] text-[#1A2A1F] dark:text-[#E8EBE6]">
-          Bitless Screen. A bit more you time.
-        </p>
+      <div className="relative z-10 max-w-xl mx-auto px-5 pt-8 pb-2 text-center">
+        <div className="bg-black/5 dark:bg-black/10 backdrop-blur-sm rounded-2xl px-8 py-5 inline-block">
+          <p className="text-[28px] font-light text-[#1A2A1F] dark:text-[#E8EBE6] animate-text-breathe">
+            <span className="text-[#6B8E5F]/60 dark:text-[#7A9D6D]/50 mr-3">꩜</span>
+            Welcome to Bitless
+            <span className="text-[#6B8E5F]/60 dark:text-[#7A9D6D]/50 ml-3">𖤍</span>
+          </p>
+          <p className="text-[17px] text-[#5A6A5E] dark:text-[#8A9A8E] mt-2 animate-text-breathe">
+            Digital Detox Readings & Daily Reflections
+          </p>
+        </div>
       </div>
 
       {/* Breath indicator */}

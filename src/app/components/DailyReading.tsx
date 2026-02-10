@@ -76,7 +76,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
               <p className="text-[11px] text-[#6B8E5F] dark:text-[#7A9D6D] uppercase tracking-[0.25em] font-semibold font-mono">
                 {reading.date}
               </p>
-              <h1 className="text-[26px] sm:text-[30px] text-[#141A16] dark:text-[#E6EBE3] font-semibold leading-tight tracking-tight">
+              <h1 className="text-[22px] sm:text-[26px] text-[#141A16] dark:text-[#E6EBE3] font-light leading-tight tracking-tight">
                 {reading.title}
               </h1>
               {reading.holidayNote && (

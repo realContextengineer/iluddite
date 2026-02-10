@@ -53,6 +53,47 @@
   animation: text-breathe 4s ease-in-out infinite;
 }
 
+/* Welcome text — slides in from left, settles, then fades out */
+@keyframes welcome-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+}
+
+.animate-welcome-slide {
+  animation: welcome-slide 4s ease-out forwards;
+}
+
+/* Tagline — fades in after welcome disappears */
+@keyframes tagline-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-tagline-reveal {
+  opacity: 0;
+  animation: tagline-reveal 2s ease-out 4s forwards;
+}
+
 /* Audio toggle prompt — gentle pulse to invite interaction */
 @keyframes audio-prompt {
   0%, 100% {
