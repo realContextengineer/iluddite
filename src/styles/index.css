@@ -100,3 +100,26 @@
 .animate-card-breathe-delayed-3 {
   animation: card-breathe 10s ease-in-out 7.5s infinite;
 }
+
+/* Breath indicator — organic pulse strip (4s inhale, 6s exhale = 10s cycle) */
+@keyframes breath-strip {
+  0% {
+    transform: scaleX(0.25);
+    opacity: 0.3;
+    box-shadow: 0 0 4px rgba(107, 142, 95, 0.1);
+  }
+  40% {
+    transform: scaleX(1);
+    opacity: 0.8;
+    box-shadow: 0 0 18px rgba(107, 142, 95, 0.5);
+  }
+  100% {
+    transform: scaleX(0.25);
+    opacity: 0.3;
+    box-shadow: 0 0 4px rgba(107, 142, 95, 0.1);
+  }
+}
+
+.animate-breath-strip {
+  animation: breath-strip 10s ease-in-out infinite;
+}

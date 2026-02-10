@@ -85,6 +85,13 @@ function App() {
         </p>
       </div>
 
+      {/* Breath indicator */}
+      <div className="relative z-10 max-w-xl mx-auto px-5 py-4">
+        <div className="flex justify-center">
+          <div className="animate-breath-strip w-full h-[3px] rounded-full bg-gradient-to-r from-transparent via-[#6B8E5F] to-transparent dark:via-[#7A9D6D]" />
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="relative z-10 px-5 pt-4 pb-20">
         <Routes>
