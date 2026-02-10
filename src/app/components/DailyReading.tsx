@@ -71,7 +71,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
       {/* Hero Card — Title */}
       <AnimateIn delay={0}>
         <div className="animate-card-breathe">
-          <div className="rounded-2xl p-8 bg-gradient-to-br from-[#6B8E5F]/10 to-[#6B8E5F]/5 dark:from-[#7A9D6D]/10 dark:to-[#7A9D6D]/5 border border-[#6B8E5F]/20 dark:border-[#7A9D6D]/20 transition-colors duration-500">
+          <div className="rounded-2xl p-8 bg-gradient-to-br from-[#6B8E5F]/10 to-[#6B8E5F]/5 dark:from-[#7A9D6D]/10 dark:to-[#7A9D6D]/5 border border-[#6B8E5F]/20 dark:border-[#7A9D6D]/20 backdrop-blur-sm transition-colors duration-500">
             <div className="text-center space-y-3">
               <p className="text-[11px] text-[#6B8E5F] dark:text-[#7A9D6D] uppercase tracking-[0.25em] font-semibold font-mono">
                 {reading.date}
@@ -92,7 +92,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
       {/* Main Reading Card — NOT tappable */}
       <AnimateIn delay={100}>
         <div className="animate-card-breathe-delayed">
-          <div className="bg-white dark:bg-[#141A16] rounded-2xl p-8 shadow-sm border border-[#E6EBE3]/60 dark:border-[#202A24] transition-colors duration-500">
+          <div className="bg-white/90 dark:bg-[#141A16]/85 backdrop-blur-sm rounded-2xl p-8 shadow-sm border border-[#E6EBE3]/60 dark:border-[#202A24] transition-colors duration-500">
             <div className="flex items-center gap-2.5 mb-5">
               <div className="w-7 h-7 rounded-full bg-[#6B8E5F]/10 dark:bg-[#7A9D6D]/10 flex items-center justify-center">
                 <BookOpen className="w-3.5 h-3.5 text-[#6B8E5F] dark:text-[#7A9D6D]" />
@@ -116,7 +116,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
       <AnimateIn delay={0}>
         <div className="animate-card-breathe-delayed-2">
           <TappableCard sectionKey="practice" isComplete={completions.practice} onToggle={toggle}>
-            <div className={`bg-[#6B8E5F]/[0.06] dark:bg-[#7A9D6D]/[0.06] rounded-2xl p-7 border transition-colors duration-500 ${completions.practice ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#6B8E5F]/15 dark:border-[#7A9D6D]/15'}`}>
+            <div className={`bg-[#6B8E5F]/[0.06] dark:bg-[#7A9D6D]/[0.06] backdrop-blur-sm rounded-2xl p-7 border transition-colors duration-500 ${completions.practice ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#6B8E5F]/15 dark:border-[#7A9D6D]/15'}`}>
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="w-7 h-7 rounded-full bg-[#6B8E5F]/15 dark:bg-[#7A9D6D]/15 flex items-center justify-center">
                   <Compass className="w-3.5 h-3.5 text-[#6B8E5F] dark:text-[#7A9D6D]" />
@@ -136,7 +136,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
       {/* Random Quote Card — NOT tappable */}
       <AnimateIn delay={0}>
         <div className="animate-card-breathe-delayed-3">
-          <div className="bg-white dark:bg-[#141A16] rounded-2xl p-7 shadow-sm border border-[#E6EBE3]/60 dark:border-[#202A24] transition-colors duration-500">
+          <div className="bg-white/90 dark:bg-[#141A16]/85 backdrop-blur-sm rounded-2xl p-7 shadow-sm border border-[#E6EBE3]/60 dark:border-[#202A24] transition-colors duration-500">
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-7 h-7 rounded-full bg-[#6B8E5F]/10 dark:bg-[#7A9D6D]/10 flex items-center justify-center">
                 <Quote className="w-3.5 h-3.5 text-[#6B8E5F] dark:text-[#7A9D6D]" />
@@ -161,7 +161,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
       <AnimateIn delay={0}>
         <div className="animate-card-breathe">
           <TappableCard sectionKey="techBoundary" isComplete={completions.techBoundary} onToggle={toggle}>
-            <div className={`bg-white dark:bg-[#141A16] rounded-2xl p-7 shadow-sm border transition-colors duration-500 ${completions.techBoundary ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#E6EBE3]/60 dark:border-[#202A24]'}`}>
+            <div className={`bg-white/90 dark:bg-[#141A16]/85 backdrop-blur-sm rounded-2xl p-7 shadow-sm border transition-colors duration-500 ${completions.techBoundary ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#E6EBE3]/60 dark:border-[#202A24]'}`}>
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="w-7 h-7 rounded-full bg-[#6B8E5F]/10 dark:bg-[#7A9D6D]/10 flex items-center justify-center">
                   <Shield className="w-3.5 h-3.5 text-[#6B8E5F] dark:text-[#7A9D6D]" />
@@ -183,7 +183,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
         <AnimateIn delay={0}>
           <div className="animate-card-breathe-delayed">
             <TappableCard sectionKey="niceSelf" isComplete={completions.niceSelf} onToggle={toggle}>
-              <div className={`bg-white dark:bg-[#141A16] rounded-2xl p-5 shadow-sm border h-full transition-colors duration-500 ${completions.niceSelf ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#E6EBE3]/60 dark:border-[#202A24]'}`}>
+              <div className={`bg-white/90 dark:bg-[#141A16]/85 backdrop-blur-sm rounded-2xl p-5 shadow-sm border h-full transition-colors duration-500 ${completions.niceSelf ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#E6EBE3]/60 dark:border-[#202A24]'}`}>
                 <p className="text-[10px] text-[#6B8E5F] dark:text-[#7A9D6D] uppercase tracking-[0.15em] font-semibold font-mono mb-2.5">
                   For You
                 </p>
@@ -197,7 +197,7 @@ export function DailyReading({ reading }: DailyReadingProps) {
         <AnimateIn delay={120}>
           <div className="animate-card-breathe-delayed-2">
             <TappableCard sectionKey="niceOther" isComplete={completions.niceOther} onToggle={toggle}>
-              <div className={`bg-white dark:bg-[#141A16] rounded-2xl p-5 shadow-sm border h-full transition-colors duration-500 ${completions.niceOther ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#E6EBE3]/60 dark:border-[#202A24]'}`}>
+              <div className={`bg-white/90 dark:bg-[#141A16]/85 backdrop-blur-sm rounded-2xl p-5 shadow-sm border h-full transition-colors duration-500 ${completions.niceOther ? 'border-[#6B8E5F]/40 dark:border-[#7A9D6D]/40' : 'border-[#E6EBE3]/60 dark:border-[#202A24]'}`}>
                 <p className="text-[10px] text-[#6B8E5F] dark:text-[#7A9D6D] uppercase tracking-[0.15em] font-semibold font-mono mb-2.5">
                   For Someone Else
                 </p>
