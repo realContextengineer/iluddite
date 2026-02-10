@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Music, Music2 } from 'lucide-react';
 
 interface AmbientAudioProps {
   src: string;
@@ -212,9 +212,9 @@ export function AmbientAudio({ src, musicSrc }: AmbientAudioProps) {
         title={isPlaying ? 'Sounds on' : 'Sounds off'}
       >
         {isPlaying ? (
-          <Volume2 className="w-4 h-4 text-[#6B8E5F] dark:text-[#7A9D6D] animate-pulse" />
+          <Music className="w-4 h-4 text-[#6B8E5F] dark:text-[#7A9D6D] animate-pulse" />
         ) : (
-          <VolumeX className="w-4 h-4 text-[#8A9488] dark:text-[#4A5A4E]" />
+          <Music2 className="w-4 h-4 text-[#8A9488] dark:text-[#4A5A4E]" />
         )}
       </button>
     </>

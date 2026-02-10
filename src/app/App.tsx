@@ -9,6 +9,7 @@ import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { AmbientAudio } from './components/AmbientAudio';
+import { VoiceReading } from './components/VoiceReading';
 import bitlessChess from '../assets/bitless-plug.png';
 import forestGif from '../assets/forest.gif';
 import forestAudio from '../assets/forest-ambient.mp3';
@@ -64,8 +65,9 @@ function App() {
               <img src={bitlessChess} alt="Bitless" className="h-[72px] w-auto dark:brightness-90 animate-logo-pulse" />
             </Link>
 
-            {/* Right side — hamburger menu */}
-            <div className="flex items-center">
+            {/* Right side — voice + hamburger menu */}
+            <div className="flex items-center gap-1">
+              <VoiceReading />
               <button
                 onClick={() => setShowMenu(true)}
                 className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#E2EBE0]/60 dark:hover:bg-[#202A24] transition-colors"
