@@ -10,7 +10,7 @@ import { ContactPage } from './pages/ContactPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { AmbientAudio } from './components/AmbientAudio';
 import bitlessChess from '../assets/bitless-plug.png';
-import forestBg from '../assets/forest.jpg';
+import forestGif from '../assets/forest.gif';
 import forestAudio from '../assets/forest-ambient.mp3';
 import ambientMusic from '../assets/ambient-music.mp3';
 
@@ -46,7 +46,7 @@ function App() {
       {/* Forest background image */}
       <div
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.25] dark:opacity-[0.20] pointer-events-none"
-        style={{ backgroundImage: `url(${forestBg})` }}
+        style={{ backgroundImage: `url(${forestGif})` }}
       />
 
       {/* Header */}
