@@ -19,19 +19,23 @@
 }
 
 .animate-logo-pulse {
-  animation: logo-pulse 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
-             logo-breathe 5s ease-in-out 1.5s infinite;
+  animation: logo-pulse 1.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+             logo-breathe 10s ease-in-out 1.5s infinite;
 }
 
 /* Living, breathing logo — like a tree in the wind */
 @keyframes logo-breathe {
   0%, 100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 6px rgba(107, 142, 95, 0.15));
+    filter: drop-shadow(0 0 10px rgba(107, 142, 95, 0.35))
+            drop-shadow(0 0 18px rgba(255, 255, 255, 0.25))
+            drop-shadow(0 0 28px rgba(107, 142, 95, 0.2));
   }
   50% {
-    transform: scale(1.04);
-    filter: drop-shadow(0 0 18px rgba(107, 142, 95, 0.45));
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 26px rgba(107, 142, 95, 0.7))
+            drop-shadow(0 0 40px rgba(255, 255, 255, 0.45))
+            drop-shadow(0 0 60px rgba(107, 142, 95, 0.35));
   }
 }
 
@@ -47,6 +51,22 @@
 
 .animate-text-breathe {
   animation: text-breathe 4s ease-in-out infinite;
+}
+
+/* Audio toggle prompt — gentle pulse to invite interaction */
+@keyframes audio-prompt {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(107, 142, 95, 0);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(107, 142, 95, 0.35);
+  }
+}
+
+.animate-audio-prompt {
+  animation: audio-prompt 2.6s ease-in-out infinite;
 }
 
 /* Card breathing — inhale 4s, exhale 6s (10s total cycle) */
