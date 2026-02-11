@@ -62,7 +62,7 @@ STRUCTURE — Return valid JSON with these exact fields:
   "somaticInvitation": "<the main reading, 2-4 paragraphs separated by \\n\\n — body-aware, grounded, sensory. This should feel like prose, not instructions.>",
   "practice": "<one concrete, doable somatic or grounding practice — 1-2 sentences. Be SPECIFIC about the body — hands, feet, ribs, jaw, shoulders. Not vague.>",
   "niceSelf": "<one kind, sensory thing to do for yourself — 1 sentence. NOT 'have a cup of tea'. Think texture, temperature, sound, taste, movement.>",
-  "niceOther": "<one act of human connection for someone else — 1 sentence. Specific, doable, real.>",
+  "niceOther": "<one act of human connection for someone else — 1 sentence. This can be a physical act OR an internal one: sitting quietly and sending good thoughts, holding someone in mind with intention, directing love or warmth toward someone silently. Vary between external acts and internal intention. Specific, doable, real.>",
   "quote": "<a real, verified quote — can be from literature, music, philosophy, comedy, film, folk wisdom. Must be genuine.>",
   "quoteSource": "<author/artist name, and work title if relevant>",
   "techBoundary": "<one specific, practical digital limit to try today — 1-2 sentences. Concrete, not vague.>",
