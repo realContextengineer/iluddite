@@ -134,13 +134,11 @@ export function VoiceReading() {
       aria-label={isSpeaking ? 'Stop reading' : 'Read aloud'}
       title={isSpeaking ? 'Stop reading' : 'Read aloud'}
     >
-      <SpeakingHead
-        className={`w-5 h-5 ${
-          isSpeaking
-            ? 'text-[#6B8E5F] dark:text-[#7A9D6D] animate-pulse'
-            : 'text-[#5A6A5E] dark:text-[#7A8A7E]'
-        }`}
-      />
+      <span className={`text-[11px] font-semibold tracking-wide ${
+        isSpeaking
+          ? 'text-[#6B8E5F] dark:text-[#7A9D6D] animate-pulse'
+          : 'text-[#5A6A5E] dark:text-[#7A8A7E]'
+      }`}>AI</span>
     </button>
   );
 }
