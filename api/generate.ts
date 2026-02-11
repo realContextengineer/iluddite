@@ -1,7 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
-import prompts from '../src/data/prompts.json';
-import pools from '../src/data/suggestion-pools.json';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const prompts = JSON.parse(readFileSync(join(process.cwd(), 'src/data/prompts.json'), 'utf-8'));
+const pools = JSON.parse(readFileSync(join(process.cwd(), 'src/data/suggestion-pools.json'), 'utf-8'));
 
 // Seeded random picker — gives consistent results per day but different each day
 function seededRandom(seed: number): () => number {
