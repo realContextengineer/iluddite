@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DailyReading } from '../components/DailyReading';
+import { Seo } from '../components/Seo';
 import readingsData from '../../data/readings.json';
 import promptsData from '../../data/prompts.json';
 
@@ -73,26 +74,52 @@ export function HomePage() {
 
   if (loading) {
     return (
-      <div className="max-w-xl mx-auto text-center py-24">
-        <div className="inline-flex items-center gap-3">
-          <div className="w-5 h-5 border-2 border-[#7A9D6D]/30 border-t-[#7A9D6D] rounded-full animate-spin" />
-          <p className="text-[#7A8A7E] dark:text-[#5A6A5E] text-[14px]">
-            Loading today's reading...
-          </p>
+      <>
+        <Seo
+          title="Daily Digital Detox Reading"
+          description="Read one daily digital detox reading at Bitless. A five-minute daily reflection to reduce screen time and build a calmer relationship with technology."
+          path="/"
+          keywords="daily digital detox reading, digital detox daily reading, reduce screen time, daily reflection app, unplug from technology"
+        />
+        <div className="max-w-xl mx-auto text-center py-24">
+          <div className="inline-flex items-center gap-3">
+            <div className="w-5 h-5 border-2 border-[#7A9D6D]/30 border-t-[#7A9D6D] rounded-full animate-spin" />
+            <p className="text-[#7A8A7E] dark:text-[#5A6A5E] text-[14px]">
+              Loading today's reading...
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!reading) {
     return (
-      <div className="max-w-xl mx-auto text-center py-24">
-        <p className="text-[#7A8A7E] dark:text-[#5A6A5E] text-[14px]">
-          No reading available. Check back soon.
-        </p>
-      </div>
+      <>
+        <Seo
+          title="Daily Digital Detox Reading"
+          description="Read one daily digital detox reading at Bitless. A five-minute daily reflection to reduce screen time and build a calmer relationship with technology."
+          path="/"
+          keywords="daily digital detox reading, digital detox daily reading, reduce screen time, daily reflection app, unplug from technology"
+        />
+        <div className="max-w-xl mx-auto text-center py-24">
+          <p className="text-[#7A8A7E] dark:text-[#5A6A5E] text-[14px]">
+            No reading available. Check back soon.
+          </p>
+        </div>
+      </>
     );
   }
 
-  return <DailyReading reading={reading} />;
+  return (
+    <>
+      <Seo
+        title="Daily Digital Detox Reading"
+        description="Read one daily digital detox reading at Bitless. A five-minute daily reflection to reduce screen time and build a calmer relationship with technology."
+        path="/"
+        keywords="daily digital detox reading, digital detox daily reading, reduce screen time, daily reflection app, unplug from technology"
+      />
+      <DailyReading reading={reading} />
+    </>
+  );
 }

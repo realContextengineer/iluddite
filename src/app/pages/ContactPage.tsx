@@ -1,9 +1,15 @@
 import React from 'react';
 import { AnimateIn } from '../components/AnimateIn';
+import { Seo } from '../components/Seo';
 
 export function ContactPage() {
   return (
     <div className="max-w-xl mx-auto space-y-6">
+      <Seo
+        title="Contact Bitless"
+        description="Contact Bitless for feedback, support, and partnership enquiries about our daily digital detox readings."
+        path="/contact"
+      />
       <AnimateIn delay={0}>
         <div className="rounded-2xl p-8 bg-gradient-to-br from-[#6B8E5F]/10 to-[#6B8E5F]/5 dark:from-[#7A9D6D]/10 dark:to-[#7A9D6D]/5 border border-[#6B8E5F]/20 dark:border-[#7A9D6D]/20 transition-colors duration-500">
           <div className="text-center space-y-4">

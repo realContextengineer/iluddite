@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AnimateIn } from '../components/AnimateIn';
+import { Seo } from '../components/Seo';
 
 export function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -25,6 +26,12 @@ export function SignUpPage() {
   if (submitted) {
     return (
       <div className="max-w-xl mx-auto space-y-6">
+        <Seo
+          title="Sign Up for Daily Digital Detox Reading"
+          description="Join Bitless to track your daily digital detox reading and build a calmer relationship with your screen."
+          path="/sign-up"
+          keywords="daily digital detox reading, digital detox daily reading, sign up digital detox app"
+        />
         <AnimateIn delay={0}>
           <div className="rounded-2xl p-8 bg-gradient-to-br from-[#6B8E5F]/10 to-[#6B8E5F]/5 dark:from-[#7A9D6D]/10 dark:to-[#7A9D6D]/5 border border-[#6B8E5F]/20 dark:border-[#7A9D6D]/20 transition-colors duration-500">
             <div className="text-center space-y-4">
@@ -46,6 +53,12 @@ export function SignUpPage() {
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
+      <Seo
+        title="Sign Up for Daily Digital Detox Reading"
+        description="Join Bitless to track your daily digital detox reading and build a calmer relationship with your screen."
+        path="/sign-up"
+        keywords="daily digital detox reading, digital detox daily reading, sign up digital detox app"
+      />
       <AnimateIn delay={0}>
         <div className="rounded-2xl p-8 bg-gradient-to-br from-[#6B8E5F]/10 to-[#6B8E5F]/5 dark:from-[#7A9D6D]/10 dark:to-[#7A9D6D]/5 border border-[#6B8E5F]/20 dark:border-[#7A9D6D]/20 transition-colors duration-500">
           <div className="text-center space-y-4">

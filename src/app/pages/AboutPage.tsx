@@ -1,10 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AnimateIn } from '../components/AnimateIn';
+import { Seo } from '../components/Seo';
 
 export function AboutPage() {
   return (
     <div className="max-w-xl mx-auto space-y-6">
+      <Seo
+        title="How to Reduce Screen Time and Unplug Daily"
+        description="Learn practical ways to reduce screen time, stop doomscrolling, and build a daily digital detox habit with short daily readings."
+        path="/about"
+        keywords="how to reduce screen time, stop doomscrolling, how to unplug from technology, daily digital detox reading"
+      />
       {/* Hero */}
       <AnimateIn delay={0}>
         <article>
